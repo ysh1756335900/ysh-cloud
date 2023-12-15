@@ -1,0 +1,38 @@
+server:
+  servlet:
+    context-path: /ysh
+  port: 8080
+
+spring:
+  application:
+    # 应用名称
+    name: ysh-system
+  profiles:
+    # 环境配置
+    active: dev
+
+#读取的nacos配置文件 ysh-system-dev.yml
+#${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  cloud:
+    #nacos配置
+    nacos:
+      discovery:
+        #注册中心开关
+        enabled: true
+        server-addr: localhost:8848
+
+        #如果nacos的application.properties中配置了nacos.core.auth.enabled=true，则此处需要配置账号密码
+        username: nacos
+        password: nacos123
+
+      config:
+        #配置中心开关
+        enabled: true
+        server-addr: localhost:8848
+
+        #如果nacos的application.properties中配置了nacos.core.auth.enabled=true，则此处需要配置账号密码
+        username: nacos
+        password: nacos123
+
+        # 配置文件格式
+        file-extension: yml

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ysh.system.dao.user.UserDao">
+
+    <resultMap type="com.ysh.common.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="loginName" column="login_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        id, password, email, type, status, create_time createTime, update_time updateTime, mobile, user_name userName, login_name loginName
+    </sql>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ysh.user(password, email, type, status, create_time, update_time, mobile, user_name, login_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.password}, #{entity.email}, #{entity.type}, #{entity.status}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.mobile}, #{entity.userName}, #{entity.loginName})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ysh.user(password, email, type, status, create_time, update_time, mobile, user_name, login_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.password}, #{entity.email}, #{entity.type}, #{entity.status}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.mobile}, #{entity.userName}, #{entity.loginName})
+        </foreach>
+        on duplicate key update
+        password = values(password) , email = values(email) , type = values(type) , status = values(status) ,
+        create_time = values(create_time) , update_time = values(update_time) , mobile = values(mobile) , user_name =
+        values(user_name) , login_name = values(login_name)
+    </insert>
+    <select id="selectByLoginName" resultType="com.ysh.common.entity.User">
+        select
+            <include refid="baseSql"></include>
+            from user where login_name = #{loginName}
+    </select>
+
+</mapper>
+
